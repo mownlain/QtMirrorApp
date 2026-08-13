@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-macos:
-    runs-on: macos-latest # macos-latest ဟု ပြောင်းလိုက်ပါ
+    runs-on: macos-13 # Intel macOS Runner (Qt Deploy အတွက် အဆင်ပြေဆုံး)
 
     steps:
     - name: Checkout Code
@@ -16,17 +16,22 @@ jobs:
     - name: Install Qt6
       uses: jurplel/install-qt-action@v3
       with:
-        version: '6.6.2'
+        version: '6.5.3'
         target: 'desktop'
         arch: 'clang_64'
 
-    - name: Build macOS App & Generate DMG
+    - name: Build project with CMake
       run: |
         mkdir build
         cd build
         cmake .. -DCMAKE_BUILD_TYPE=Release
         cmake --build . --config Release
-        macdeployqt appQtMirrorApp.app -qmldir=.. -dmg
+
+    - name: Deploy Qt & Create DMG
+      run: |
+        cd build
+        # .app ဖိုင်ရှိမရှိ စစ်ဆေးပြီး macdeployqt ရိုက်ခြင်း
+        macdeployqt *.app -qmldir=../ -dmg
 
     - name: Upload DMG Artifact
       uses: actions/upload-artifact@v4

@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/qt/qml/QtMirrorApp/">
+    <file alias="Main.qml">C:/Users/MD/Documents/QtMirrorApp/Main.qml</file>
+  </qresource>
+</RCC>
+

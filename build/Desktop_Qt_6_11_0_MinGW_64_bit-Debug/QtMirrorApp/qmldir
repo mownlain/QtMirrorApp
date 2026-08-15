@@ -1,0 +1,6 @@
+module QtMirrorApp
+typeinfo appQtMirrorApp.qmltypes
+prefer :/qt/qml/QtMirrorApp/
+Main 1.0 Main.qml
+depends QtQuick
+

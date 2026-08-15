@@ -25,6 +25,14 @@ set_target_properties(appQtMirrorApp PROPERTIES
     MACOSX_BUNDLE_SHORT_VERSION_STRING "1.0"
 )
 
+# --- Windows CMD Window မပေါ်စေရန် ဒီနေရာတွင် ဖြည့်ပေးပါ ---
+if(WIN32)
+    set_target_properties(appQtMirrorApp PROPERTIES
+        WIN32_EXECUTABLE TRUE
+    )
+endif()
+# --------------------------------------------------
+
 # QML Module မှန်ကန်စွာ သတ်မှတ်ခြင်း
 qt_add_qml_module(appQtMirrorApp
     URI QtMirrorApp
@@ -37,3 +45,10 @@ target_link_libraries(appQtMirrorApp PRIVATE
     Qt6::Quick
     Qt6::Network
 )
+# macOS Target ဖြစ်ပါက AGL Error မတက်စေရန် OpenGL / Cocoa Framework ကို သီးသန့် ချိတ်ပေးခြင်း
+if(APPLE)
+    target_link_libraries(appQtMirrorApp PRIVATE
+        "-framework Cocoa"
+        "-framework OpenGL"
+    )
+endif()

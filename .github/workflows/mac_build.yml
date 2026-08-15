@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-macos:
-    runs-on: macos-latest
+    runs-on: macos-13
 
     steps:
     - name: Checkout Code
@@ -16,8 +16,9 @@ jobs:
     - name: Setup Qt
       uses: jurplel/install-qt-action@v3
       with:
-        version: '6.5.3'
+        version: '6.6.2'
         target: 'desktop'
+        arch: 'clang_64'
 
     - name: Build Project
       run: |
@@ -29,7 +30,10 @@ jobs:
     - name: Deploy Qt & Make DMG
       run: |
         cd build
-        macdeployqt *.app -qmldir=../ -dmg
+        # .app folder နာမည်ကို အတိအကျ ရှာပြီး Deploy ပြုလုပ်ခြင်း
+        APP_PATH=$(find . -name "*.app" -maxdepth 2)
+        echo "Found app at: $APP_PATH"
+        macdeployqt "$APP_PATH" -qmldir=../ -dmg
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4

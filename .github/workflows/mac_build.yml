@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-macos:
-    runs-on: macos-13
+    runs-on: macos-14 # Fast & Available Runner
 
     steps:
     - name: Checkout Code
@@ -30,9 +30,7 @@ jobs:
     - name: Deploy Qt & Make DMG
       run: |
         cd build
-        # .app folder နာမည်ကို အတိအကျ ရှာပြီး Deploy ပြုလုပ်ခြင်း
         APP_PATH=$(find . -name "*.app" -maxdepth 2)
-        echo "Found app at: $APP_PATH"
         macdeployqt "$APP_PATH" -qmldir=../ -dmg
 
     - name: Upload Artifact

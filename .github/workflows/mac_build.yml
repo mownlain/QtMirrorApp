@@ -7,33 +7,31 @@ on:
 
 jobs:
   build-macos:
-    runs-on: macos-13 # Intel macOS Runner (Qt Deploy အတွက် အဆင်ပြေဆုံး)
+    runs-on: macos-latest
 
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
 
-    - name: Install Qt6
+    - name: Setup Qt
       uses: jurplel/install-qt-action@v3
       with:
         version: '6.5.3'
         target: 'desktop'
-        arch: 'clang_64'
 
-    - name: Build project with CMake
+    - name: Build Project
       run: |
         mkdir build
         cd build
         cmake .. -DCMAKE_BUILD_TYPE=Release
         cmake --build . --config Release
 
-    - name: Deploy Qt & Create DMG
+    - name: Deploy Qt & Make DMG
       run: |
         cd build
-        # .app ဖိုင်ရှိမရှိ စစ်ဆေးပြီး macdeployqt ရိုက်ခြင်း
         macdeployqt *.app -qmldir=../ -dmg
 
-    - name: Upload DMG Artifact
+    - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: QtMirrorApp-Mac-DMG

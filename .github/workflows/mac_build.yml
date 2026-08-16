@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-macos:
-    runs-on: macos-14 # Fast & Available Runner
+    runs-on: macos-14
 
     steps:
     - name: Checkout Code
@@ -22,16 +22,14 @@ jobs:
 
     - name: Build Project
       run: |
-        mkdir build
-        cd build
-        cmake .. -DCMAKE_BUILD_TYPE=Release
-        cmake --build . --config Release
+        cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$Qt6_DIR"
+        cmake --build build --config Release
 
     - name: Deploy Qt & Make DMG
       run: |
-        cd build
-        APP_PATH=$(find . -name "*.app" -maxdepth 2)
-        macdeployqt "$APP_PATH" -qmldir=../ -dmg
+        APP_PATH=$(find build -name "*.app" -type d | head -n 1)
+        echo "Found App: $APP_PATH"
+        macdeployqt "$APP_PATH" -qmldir=. -dmg
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
